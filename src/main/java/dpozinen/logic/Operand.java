@@ -2,31 +2,33 @@ package dpozinen.logic;
 
 public class Operand implements Comparable<Operand> {
 	private double	num;
-	private boolean	sign;
 	private int		power;
-	private	boolean isVar;
+	private	boolean	afterEquals;
 
-	public Operand(double num, boolean sign, int power, boolean isVar) {
+	public Operand(double num, int power, boolean afterEquals) {
 		this.num = num;
-		this.sign = sign;
 		this.power = power;
-		this.isVar = isVar;
+		this.afterEquals = afterEquals;
 	}
 
 	public double getNum() {
 		return this.num;
 	}
 
-	public boolean getSign() {
-		return this.sign;
-	}
-
-	public boolean isVar() {
-		return this.isVar;
-	}
-
 	public int getPower() {
 		return this.power;
+	}
+
+	public boolean isAfterEquals() {
+		return this.afterEquals;
+	}
+
+	public void changeSign() {
+		this.num = -num;
+	}
+
+	public void add(Operand o) {
+		this.num += o.num;
 	}
 
 	@Override
