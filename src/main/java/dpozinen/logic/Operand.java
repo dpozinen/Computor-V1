@@ -3,12 +3,12 @@ package dpozinen.logic;
 public class Operand implements Comparable<Operand> {
 	private double	num;
 	private int		power;
-	private	boolean	afterEquals;
+
+	public Operand(){};
 
 	public Operand(double num, int power, boolean afterEquals) {
 		this.num = num;
 		this.power = power;
-		this.afterEquals = afterEquals;
 	}
 
 	public double getNum() {
@@ -19,16 +19,18 @@ public class Operand implements Comparable<Operand> {
 		return this.power;
 	}
 
-	public boolean isAfterEquals() {
-		return this.afterEquals;
-	}
-
 	public void changeSign() {
 		this.num = -num;
 	}
 
 	public void add(Operand o) {
 		this.num += o.num;
+	}
+	public void setNum(double num) {
+		this.num = num;
+	}
+	public void setPower(int power) {
+		this.power = power;
 	}
 
 	@Override
@@ -38,5 +40,18 @@ public class Operand implements Comparable<Operand> {
         if (o.power < power)
             return 1;
         return 0;
+	}
+
+	public boolean isOfPower(Operand o) {
+		return (o.getPower() == power) && (o != this);
+	}
+
+	public String show() {
+		return Math.abs(num) + " * X^" + power;
+	}
+
+	@Override
+	public String toString() {
+		return num + "X^" + power;
 	}
 }
