@@ -6,8 +6,8 @@ import dpozinen.logic.*;
 public class App {
 	public static void main(String[] args) {
 		try {
-			List<Operand> operands = new Input().parseInput("5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0");
-			System.out.println(operands);
+			List<Operand> operands = new Input().parseInput("42 ∗ X^0 = 42 ∗ X^0");
+			// System.out.println(operands);
 			Solver solver = new Solver(operands);
 			solver.solve();
 		} catch (Exception e) {

@@ -1,12 +1,18 @@
 package dpozinen.logic;
 
-// TODO: redo x to non D
+import org.apache.commons.math3.util.Precision;
+
 public class Solution {
     private Double Discriminant;
     private Double x1;
-    private Double x2;
+	private double x2;
+	private boolean trueForAll;
 
-	public Solution(Double Discriminant, Double x1, Double x2) {
+	public Solution(boolean trueForAll){
+		this.trueForAll = trueForAll;
+	};
+
+	public Solution(Double Discriminant, Double x1, double x2) {
 		this.Discriminant = Discriminant;
 		this.x1 = x1;
 		this.x2 = x2;
@@ -20,7 +26,7 @@ public class Solution {
 		return this.x1;
 	}
 
-	public Double getX2() {
+	public double getX2() {
 		return this.x2;
 	}
 
@@ -28,9 +34,15 @@ public class Solution {
 	public String toString() {
 		if (Discriminant != null && Discriminant > 0)
 			return "Discriminant is strictly positive, the two solutions are:\n"
-			+ x1 + "\n" + x2;
+			+ Precision.round(x1, 6) + "\n" + Precision.round(x2, 6);
 		if (Discriminant != null && Discriminant == 0)
-			return "Discriminant is equal to zero, the only solution is:\n" + x1;
-		return "The solution is:\n" + x1;
+			return "Discriminant is equal to zero, the only solution is:\n" + Precision.round(x1, 6);
+		if (Discriminant != null && Discriminant < 0)
+			return "Discriminant is less than zero, no solutions found";
+		if (x1 != null)
+			return "The solution is:\n" + Precision.round(x1, 6);
+		if (trueForAll)
+			return "All real numbers are solution";
+		return "No solutions found";
 	}
 }

@@ -23,7 +23,7 @@ public class Output {
     }
 
     static public void showSolution(Solution solution) {
-		System.out.println(solution);
+		System.out.print(solution);
 	}
 
     static public void showPolinomDegree(Operand max) throws InvalidAttributeValueException {
