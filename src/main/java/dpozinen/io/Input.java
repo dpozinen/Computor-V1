@@ -24,7 +24,6 @@ public class Input {
 			throw new IllegalArgumentException("Invalid input");
 	}
 
-	// TODO: better parsing: -534.3we5
 	public List<Operand> parseInput(String s) {
 		final String splitter = "(?=-)|(?=\\+)|((?==)|(?<==))"; // leave '-' & '+' infront of num, separate '='
 
@@ -45,7 +44,6 @@ public class Input {
 		return operands;
 	}
 
-	// TODO: remember negateive powers?
 	private Operand extractOperand(String sp, boolean afterEquals) {
 		Operand operand = null;
 		try {
