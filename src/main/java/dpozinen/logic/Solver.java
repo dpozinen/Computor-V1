@@ -6,26 +6,30 @@ import java.util.HashSet;
 import java.util.List;
 
 import dpozinen.logic.Operand;
+import dpozinen.io.Input;
 import dpozinen.io.Output;
 import dpozinen.logic.Solution;
 
 public class Solver {
-	List<Operand> operands;
+	Solution solution = null;
 
-	public Solver(List<Operand> operands) {
-		this.operands = operands;
-	}
-
-	public void solve() {
+	public Solution solve(String s, boolean verbose) {
 		try {
+			List<Operand> operands = new Input().parseInput(s);
 			Operand max = Collections.max(operands);
 			reduceForm(operands, max);
-			Output.showReducedForm(operands);
+			if (verbose) {
+				Output.showReducedForm(operands);
+			}
 			Output.showPolinomDegree(max); // throws exception at > 3
-			Output.showSolution(getSolution(operands, max));
+			solution = getSolution(operands, max);
+			if (verbose)
+				System.out.println(solution.getDiscriminant());
+			Output.showSolution(solution);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		return solution;
 	}
 
 	private Solution getSolution(List <Operand> operands, Operand max) {
@@ -58,6 +62,8 @@ public class Solver {
 		also adding same powered
 	*/
 	private void reduceForm(List<Operand> operands, Operand max) {
+		if (max.getPower() == 2)
+			operands.add(new Operand(0, 1));
 		Collections.sort(operands);
 
 		HashSet<Integer> powers = new HashSet<>(max.getPower());

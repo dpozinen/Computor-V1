@@ -6,7 +6,7 @@ public class Operand implements Comparable<Operand> {
 
 	public Operand(){};
 
-	public Operand(double num, int power, boolean afterEquals) {
+	public Operand(double num, int power) {
 		this.num = num;
 		this.power = power;
 	}
