@@ -4,7 +4,7 @@ import org.apache.commons.math3.util.Precision;
 
 public class Solution {
     private Double Discriminant;
-    private Double x1;
+    private double x1;
 	private double x2;
 	private boolean trueForAll;
 
@@ -39,10 +39,10 @@ public class Solution {
 			return "Discriminant is equal to zero, the only solution is:\n" + Precision.round(x1, 6);
 		if (Discriminant != null && Discriminant < 0)
 			return "Discriminant is less than zero, no solutions found";
-		if (x1 != null)
-			return "The solution is:\n" + Precision.round(x1, 6);
 		if (trueForAll)
 			return "All real numbers are solution";
+		if (Discriminant == null)
+			return "The solution is:\n" + Precision.round(x1, 6);
 		return "No solutions found";
 	}
 }

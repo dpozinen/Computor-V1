@@ -37,7 +37,7 @@ public class Solver {
 			double a = operands.get(2).getNum();
 			double b = operands.get(1).getNum();
 			double c = operands.get(0).getNum();
-			Double x1 = null;
+			double x1 = 0;
 			double x2 = 0;
 
 			double Discriminant = Math.pow(b, 2) - 4 * a * c;
@@ -47,7 +47,7 @@ public class Solver {
 				x2 = (-b - Math.sqrt(Discriminant)) / (2 * a);
 			return new Solution(Discriminant, x1, x2);
 		} else if (max.getPower() == 1 && operands.size() == 2) {
-			Double x1 = -operands.get(0).getNum() / operands.get(1).getNum();
+			double x1 = -operands.get(0).getNum() / operands.get(1).getNum();
 			return new Solution(null, x1, 0d);
 		} else {
 			if (operands.get(0).getNum() == 0d)
