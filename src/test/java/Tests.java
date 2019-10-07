@@ -2,8 +2,6 @@
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import dpozinen.logic.Solution;
-import dpozinen.logic.Solver;
 
 public class Tests {
 	Solver solver = new Solver();
