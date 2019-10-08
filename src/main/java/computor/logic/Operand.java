@@ -4,9 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 
-public class Operand implements Comparable<Operand>{
+public final class Operand implements Comparable<Operand>{
 	private final BigDecimal number;
-	private final short      power;
+	private final short power;
+	private boolean simpleOutput;
 
 	public Operand(BigDecimal number, short power) {
 		this.number = number;
@@ -18,17 +19,31 @@ public class Operand implements Comparable<Operand>{
 		throw new IllegalArgumentException("Powers don't match");
 	}
 
-	@Override public int compareTo(Operand o) {
-		return Short.compare(o.power, this.power);
+	public void enableSimpleOutput() {
+		simpleOutput = true;
+	}
+
+	public Short power() {
+		return power;
 	}
 
 	public boolean powerEquals(Operand o) {
 		return this.power == o.power;
 	}
 
+	@Override public int compareTo(Operand o) {
+		return Short.compare(this.power, o.power);
+	}
+
 	@Override public String toString() {
 		String sign = number.compareTo(BigDecimal.ZERO) >= 0 ? " + " : " - ";
 		String number = StringUtils.removeStart(this.number.stripTrailingZeros().toString(), "-");
-		return String.format("%s%s * X ^ %d", sign, number, power);
+
+		if (simpleOutput) {
+			String format = power == 0 ? "%s%s" : power == 1 ? "%s%s * X" : "%s%s * X ^ %d";
+			return String.format(format, sign, number, power);
+		} else {
+			return String.format("%s%s * X ^ %d", sign, number, power);
+		}
 	}
 }

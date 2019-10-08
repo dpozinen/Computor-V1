@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Validator {
+public final class Validator {
 	private static final String OPERAND_REGEX = "^([+-]?\\d*\\.?\\d*)\\*X\\^(\\d+)$";
 
 //	5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0

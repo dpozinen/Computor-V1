@@ -18,7 +18,10 @@ public final class Solver implements Callable<Output> {
 
 	@Override public Output call() {
 		Equation equation = Validator.validate(inputEquation);
-		equation.forEach(System.out::print); System.out.println(" = 0");
+		System.out.printf("Full form: %s%n", equation);
+		System.out.printf("Reduced form: %s%n", equation.reduce());
+		System.out.printf("Simple form: %s%n", equation.simplify());
+		System.out.printf("Polynomial degree: %s%n", equation.degree());
 		return solve(equation);
 	}
 
