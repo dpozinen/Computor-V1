@@ -23,7 +23,7 @@ public final class Operand implements Comparable<Operand>{
 		simpleOutput = true;
 	}
 
-	public Short power() {
+	public short power() {
 		return power;
 	}
 

@@ -11,21 +11,25 @@ import static java.util.stream.Collectors.toList;
 public final class Equation implements Iterable<Operand> {
 	private final List<Operand> operands = new ArrayList<>();
 	private short degree = -1;
+	private boolean reduced;
 
 	Equation reduce() {
 		Set<Short> usedPowers = new HashSet<>();
+		sort();
 		for ( ListIterator<Operand> it = operands.listIterator(); it.hasNext();  ) {
 			Operand current = it.next();
 			if (!usedPowers.add(current.power())) {
 				it.remove(); continue;
 			}
 			for (Operand operand : findAllOfSamePower(current))
-				it.set(operand.plus(current));
+				current = operand.plus(current);
+			it.set(current);
 		}
+		reduced = true;
 		return this.removeZeroes();
 	}
 
-	public Equation simplify() {
+	Equation simplify() {
 		forEach(Operand::enableSimpleOutput);
 		return this;
 	}
@@ -41,15 +45,20 @@ public final class Equation implements Iterable<Operand> {
 		return this;
 	}
 
+	Operand getOfPower(int power) {
+		if (!reduced) reduce();
+		return operands.stream().filter(o -> o.power() == power).findAny().orElse(null);
+	}
+
 	public void add(Operand operand) {
 		operands.add(operand);
 	}
 
-	public short degree() {
+	short degree() {
 		return degree == -1 ? degree = Collections.max(operands).power() : degree;
 	}
 
-	public Equation sort() {
+	Equation sort() {
 		operands.sort(Comparator.<Operand>naturalOrder().reversed());
 		return this;
 	}

@@ -53,7 +53,7 @@ public final class Validator {
 		Matcher m = Pattern.compile(FULL_OPERAND_REGEX).matcher(operand);
 		// noinspection ResultOfMethodCallIgnored
 		m.find();
-		BigDecimal number = new BigDecimal(m.group(1));
+		BigDecimal number = new BigDecimal(m.group(1).replaceAll("[^,.\\-+\\d]", ""));
 		short power = Short.parseShort(m.group(2));
 		return new Operand(doNegate(operand) ? number.negate() : number, power);
 	}
