@@ -27,6 +27,10 @@ public final class Operand implements Comparable<Operand>{
 		return power;
 	}
 
+	public BigDecimal number() {
+		return number;
+	}
+
 	public boolean powerEquals(Operand o) {
 		return this.power == o.power;
 	}

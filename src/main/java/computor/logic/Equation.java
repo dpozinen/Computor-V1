@@ -2,6 +2,7 @@ package computor.logic;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -21,7 +22,7 @@ public final class Equation implements Iterable<Operand> {
 			for (Operand operand : findAllOfSamePower(current))
 				it.set(operand.plus(current));
 		}
-		return this;
+		return this.removeZeroes();
 	}
 
 	public Equation simplify() {
@@ -33,13 +34,24 @@ public final class Equation implements Iterable<Operand> {
 		return operands.stream().filter(o -> o.powerEquals(current) && !o.equals(current)).collect(toList());
 	}
 
+	private Equation removeZeroes() {
+		for ( Iterator<Operand> i = iterator(); i.hasNext(); )
+			if (i.next().number().compareTo(BigDecimal.ZERO) == 0)
+				i.remove();
+		return this;
+	}
+
 	public void add(Operand operand) {
 		operands.add(operand);
-		operands.sort(Comparator.<Operand>naturalOrder().reversed());
 	}
 
 	public short degree() {
 		return degree == -1 ? degree = Collections.max(operands).power() : degree;
+	}
+
+	public Equation sort() {
+		operands.sort(Comparator.<Operand>naturalOrder().reversed());
+		return this;
 	}
 
 	@Override public Iterator<Operand> iterator() {
