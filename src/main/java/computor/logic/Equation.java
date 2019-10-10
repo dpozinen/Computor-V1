@@ -74,6 +74,7 @@ public final class Equation implements Iterable<Operand> {
 	}
 
 	@Override public String toString() {
+		if (operands.isEmpty()) return "0 = 0";
 		StringBuilder sb = new StringBuilder();
 		forEach(sb::append); sb.append(" = 0");
 		return StringUtils.removeStart(sb.toString(), " + ").trim();
