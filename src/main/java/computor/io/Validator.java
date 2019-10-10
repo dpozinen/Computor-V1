@@ -41,7 +41,7 @@ public final class Validator {
 	}
 
 	public static Operand validateOperand(String operand) {
-		operand = RegExUtils.removePattern(operand, "\\s+");
+		operand = RegExUtils.removePattern(operand, "\\s+").toUpperCase();
 		if (operand.matches(FULL_OPERAND_REGEX))
 			return extractFull(operand);
 		else if (operand.matches(FIRST_DEGREE_REGEX))
