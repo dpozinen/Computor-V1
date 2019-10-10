@@ -10,6 +10,7 @@ plugins {
     // Apply the java plugin to add support for Java
     id 'java'
 
+    id 'idea'
     // Apply the application plugin to add support for building an application
     id 'application'
 }
@@ -27,8 +28,17 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.apache.commons/commons-math3
 	compile group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
 
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
 
+test {
+    useJUnitPlatform()
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
