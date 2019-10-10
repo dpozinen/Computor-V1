@@ -12,10 +12,11 @@ import computor.logic.Equation;
 import computor.logic.Operand;
 
 public final class Validator {
-	private static final String FULL_OPERAND_REGEX = "^([+-=]?\\d*\\.?\\d*)\\*X\\^(\\d+)$";
-	private static final String FIRST_DEGREE_REGEX = "^([+-=]?\\d*\\.?\\d*)\\*X$";
-	private static final String NO_NUMBER_REGEX = "^[+-=]?X\\^(\\d+)$";
-	private static final String NO_DEGREE_REGEX = "^([+-=]?\\d*\\.?\\d*)$";
+	private static final String FULL_OPERAND_REGEX   = "^([+-=]?\\d*[.,]?\\d*)\\*X\\^(\\d+)$";
+	private static final String FIRST_DEGREE_REGEX   = "^([+-=]?\\d*[.,]?\\d*)\\*X$";
+	private static final String NO_NUMBER_REGEX      = "^[+-=]?X\\^(\\d+)$";
+	private static final String NO_DEGREE_REGEX      = "^([+-=]?\\d*[.,]?\\d*)$";
+	private static final String NORMAL_OPERAND_REGEX = "^([+-=]?\\d*[.,]?\\d*)X\\^(\\d+)$";
 
 	private Validator() {
 		throw new AssertionError();
@@ -28,8 +29,10 @@ public final class Validator {
 	*/
 	public static Equation validate(String inputEquation) {
 		String eq = RegExUtils.removePattern(inputEquation, "\\s+");
-		if (StringUtils.isBlank(eq)) throw new IllegalArgumentException("String is empty");
-		if (!eq.contains("=") || eq.replaceFirst("=", "").contains("=")) throw new IllegalArgumentException("Equals sign shenanigans");
+		if (StringUtils.isBlank(eq))
+			throw new IllegalArgumentException("String is empty");
+		if (!eq.contains("=") || eq.replaceFirst("=", "").contains("="))
+			throw new IllegalArgumentException("Equals sign shenanigans");
 
 		String[] operands = eq.replace("+", " +").replace("-", " -").replace("=", " =").split(" ");
 		Equation equation = new Equation();
@@ -37,7 +40,8 @@ public final class Validator {
 		return equation;
 	}
 
-	private static Operand validateOperand(String operand) {
+	public static Operand validateOperand(String operand) {
+		operand = RegExUtils.removePattern(operand, "\\s+");
 		if (operand.matches(FULL_OPERAND_REGEX))
 			return extractFull(operand);
 		else if (operand.matches(FIRST_DEGREE_REGEX))
@@ -46,14 +50,25 @@ public final class Validator {
 			return extractSimplified(operand, NO_DEGREE_REGEX,  0);
 		else if (operand.matches(NO_NUMBER_REGEX))
 			return extractNoNumber(operand);
+		else if ( operand.matches(NORMAL_OPERAND_REGEX) )
+			return extractNormalOperand(operand);
 		throw new IllegalArgumentException(String.format("Bad operand: %s", operand));
+	}
+
+	private static Operand extractNormalOperand(String operand) {
+		Matcher m = Pattern.compile(NORMAL_OPERAND_REGEX).matcher(operand);
+		// noinspection ResultOfMethodCallIgnored
+		m.find();
+		BigDecimal number = new BigDecimal(getCleanNumber(m));
+		short power = Short.parseShort(m.group(2));
+		return new Operand(doNegate(operand) ? number.negate() : number, power);
 	}
 
 	private static Operand extractFull(String operand) {
 		Matcher m = Pattern.compile(FULL_OPERAND_REGEX).matcher(operand);
 		// noinspection ResultOfMethodCallIgnored
 		m.find();
-		BigDecimal number = new BigDecimal(m.group(1).replaceAll("[^,.\\-+\\d]", ""));
+		BigDecimal number = new BigDecimal(getCleanNumber(m));
 		short power = Short.parseShort(m.group(2));
 		return new Operand(doNegate(operand) ? number.negate() : number, power);
 	}
@@ -62,7 +77,7 @@ public final class Validator {
 		Matcher m = Pattern.compile(regex).matcher(operand);
 		// noinspection ResultOfMethodCallIgnored
 		m.find();
-		BigDecimal number = new BigDecimal(m.group(1));
+		BigDecimal number = new BigDecimal(getCleanNumber(m));
 		return new Operand(doNegate(operand) ? number.negate() : number, (short) power);
 	}
 
@@ -73,6 +88,10 @@ public final class Validator {
 		short power = Short.parseShort(m.group(1));
 		BigDecimal number = doNegate(operand) ? BigDecimal.ONE.negate() : BigDecimal.ONE ;
 		return new Operand(number, power);
+	}
+
+	private static String getCleanNumber(Matcher m) {
+		return m.group(1).replaceAll("[^,.\\-+\\d]", "").replace(",", ".");
 	}
 
 	private static boolean doNegate(String operand) {

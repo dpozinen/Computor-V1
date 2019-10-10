@@ -18,14 +18,24 @@ public final class Solver implements Callable<Output> {
 	}
 
 	@Override public Output call() {
-		Equation equation = Validator.validate(inputEquation);
-		System.out.printf("Full form: %s%n", equation);
-		System.out.printf("Reduced form: %s%n", equation.reduce());
-		System.out.printf("Simple form: %s%n", equation.simplify());
-		System.out.printf("Polynomial degree: %s%n", equation.degree());
-		Output solution = solve(equation);
-		System.out.println(solution);
-		return solution;
+		Equation equation;
+		try {
+			equation = Validator.validate(inputEquation);
+			System.out.printf("Full form: 	  %s%n", equation);
+			System.out.printf("Reduced form: %s%n", equation.reduce());
+			System.out.printf("Simple form:  %s%n", equation.simplify());
+			System.out.printf("Clean form:   %s%n", equation.clean());
+			if ( equation.degree() < 2 ) {
+				System.out.printf("Polynomial degree: %s%n", equation.degree());
+				Output solution = solve(equation);
+				System.out.println(solution);
+				return solution;
+			} else  {
+				System.out.printf("The polynomial degree is %s which is strictly greater than 2, I can't solve.%n", equation.degree());
+				return Output.UNSOLVABLE;
+			}
+		} catch (IllegalArgumentException e) { System.err.println(e.getMessage()); }
+		return Output.UNSOLVABLE;
 	}
 
 	private Output solve(Equation equation) {

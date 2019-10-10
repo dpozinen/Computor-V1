@@ -16,12 +16,12 @@ public final class Equation implements Iterable<Operand> {
 	Equation reduce() {
 		Set<Short> usedPowers = new HashSet<>();
 		sort();
-		for ( ListIterator<Operand> it = operands.listIterator(); it.hasNext();  ) {
+		for ( ListIterator<Operand> it = operands.listIterator(); it.hasNext(); ) {
 			Operand current = it.next();
 			if (!usedPowers.add(current.power())) {
 				it.remove(); continue;
 			}
-			for (Operand operand : findAllOfSamePower(current))
+			for (Operand operand : findMatchingOperands(current))
 				current = operand.plus(current);
 			it.set(current);
 		}
@@ -34,7 +34,7 @@ public final class Equation implements Iterable<Operand> {
 		return this;
 	}
 
-	private List<Operand> findAllOfSamePower(Operand current) {
+	private List<Operand> findMatchingOperands(Operand current) {
 		return operands.stream().filter(o -> o.powerEquals(current) && !o.equals(current)).collect(toList());
 	}
 
@@ -55,7 +55,9 @@ public final class Equation implements Iterable<Operand> {
 	}
 
 	short degree() {
-		return degree == -1 ? degree = Collections.max(operands).power() : degree;
+		return degree == -1 ?
+			!operands.isEmpty() ? degree = Collections.max(operands).power() : 0
+			: degree;
 	}
 
 	Equation sort() {
@@ -75,5 +77,10 @@ public final class Equation implements Iterable<Operand> {
 		StringBuilder sb = new StringBuilder();
 		forEach(sb::append); sb.append(" = 0");
 		return StringUtils.removeStart(sb.toString(), " + ").trim();
+	}
+
+	Equation clean() {
+		forEach(Operand::enableCleanOutput);
+		return this;
 	}
 }
